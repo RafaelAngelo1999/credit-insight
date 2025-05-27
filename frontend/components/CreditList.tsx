@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -13,14 +14,27 @@ import { AddCreditDialog } from "./AddCreditDialog";
 
 type Credit = {
   id: string;
-  name: string;
-  amount: number;
+  nome: string;
+  sobrenome: string;
+  cpf: string;
+  telefone: string;
+  renda: number;
+  valor: number;
+  prazo: number;
 };
 
 export function CreditList() {
   const [credits, setCredits] = useState<Credit[]>([
-    { id: "1", name: "Crédito A", amount: 100 },
-    { id: "2", name: "Crédito B", amount: 200 },
+    {
+      id: "1",
+      nome: "João",
+      sobrenome: "Silva",
+      cpf: "123.456.789-00",
+      telefone: "(11) 91234-5678",
+      renda: 5000,
+      valor: 10000,
+      prazo: 12,
+    },
   ]);
 
   const handleAddCredit = (newCredit: Credit) => {
@@ -37,17 +51,25 @@ export function CreditList() {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>ID</TableHead>
             <TableHead>Nome</TableHead>
-            <TableHead>Valor</TableHead>
+            <TableHead>Sobrenome</TableHead>
+            <TableHead>CPF</TableHead>
+            <TableHead>Telefone</TableHead>
+            <TableHead>Renda (R$)</TableHead>
+            <TableHead>Valor (R$)</TableHead>
+            <TableHead>Prazo (meses)</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {credits.map((credit) => (
             <TableRow key={credit.id}>
-              <TableCell>{credit.id}</TableCell>
-              <TableCell>{credit.name}</TableCell>
-              <TableCell>R$ {credit.amount}</TableCell>
+              <TableCell>{credit.nome}</TableCell>
+              <TableCell>{credit.sobrenome}</TableCell>
+              <TableCell>{credit.cpf}</TableCell>
+              <TableCell>{credit.telefone}</TableCell>
+              <TableCell>R$ {credit.renda.toLocaleString("pt-BR")}</TableCell>
+              <TableCell>R$ {credit.valor.toLocaleString("pt-BR")}</TableCell>
+              <TableCell>{credit.prazo}</TableCell>
             </TableRow>
           ))}
         </TableBody>

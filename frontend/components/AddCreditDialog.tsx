@@ -21,6 +21,7 @@ import { v4 as uuidv4 } from "uuid";
 import InputMask from "react-input-mask";
 
 type AddCreditDialogProps = {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onAdd: (credit: any) => void;
 };
 
@@ -58,6 +59,32 @@ export function AddCreditDialog({ onAdd }: AddCreditDialogProps) {
     setPrazo("");
   };
 
+  const formatCPF = (value: string) => {
+    let v = value.replace(/\D/g, "");
+    v = v.replace(/(\d{3})(\d)/, "$1.$2");
+    v = v.replace(/(\d{3})(\d)/, "$1.$2");
+    v = v.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+    return v;
+  };
+
+  const formatTelefone = (value: string) => {
+    let v = value.replace(/\D/g, "");
+    if (v.length > 10) {
+      v = v.replace(/(\d{2})(\d{5})(\d{4})/, "($1) $2-$3");
+    } else {
+      v = v.replace(/(\d{2})(\d{4})(\d{0,4})/, "($1) $2-$3");
+    }
+    return v;
+  };
+
+  const handleCPFChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCpf(formatCPF(e.target.value));
+  };
+
+  const handleTelefoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTelefone(formatTelefone(e.target.value));
+  };
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -92,32 +119,26 @@ export function AddCreditDialog({ onAdd }: AddCreditDialogProps) {
 
           <div className="space-y-2">
             <Label htmlFor="cpf">CPF</Label>
-            <InputMask
-              mask="999.999.999-99"
+            <Input
+              id="cpf"
+              placeholder="000.000.000-00"
               value={cpf}
-              onChange={(e) => setCpf(e.target.value)}
-            >
-              {(inputProps) => (
-                <Input {...inputProps} id="cpf" placeholder="000.000.000-00" />
-              )}
-            </InputMask>
+              onChange={handleCPFChange}
+              type="text"
+              maxLength={14} // CPF formatado tem 14 caracteres
+            />
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="telefone">Telefone</Label>
-            <InputMask
-              mask="(99) 99999-9999"
+            <Input
+              id="telefone"
+              placeholder="(00) 00000-0000"
               value={telefone}
-              onChange={(e) => setTelefone(e.target.value)}
-            >
-              {(inputProps) => (
-                <Input
-                  {...inputProps}
-                  id="telefone"
-                  placeholder="(00) 00000-0000"
-                />
-              )}
-            </InputMask>
+              onChange={handleTelefoneChange}
+              type="text"
+              maxLength={15} // Telefone formatado tem até 15 caracteres
+            />
           </div>
 
           <div className="space-y-2">
